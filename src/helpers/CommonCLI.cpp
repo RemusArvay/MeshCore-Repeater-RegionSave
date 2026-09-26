@@ -1071,6 +1071,7 @@ void CommonCLI::handleRegionCmd(char* command, char* reply) {
     auto region = _region_map->findByNamePrefix(parts[2]);
     if (region) {
       region->flags &= ~REGION_DENY_FLOOD;
+      _callbacks->saveRegions();
       strcpy(reply, "OK");
     } else {
       strcpy(reply, "Err - unknown region");
@@ -1079,6 +1080,7 @@ void CommonCLI::handleRegionCmd(char* command, char* reply) {
     auto region = _region_map->findByNamePrefix(parts[2]);
     if (region) {
       region->flags |= REGION_DENY_FLOOD;
+      _callbacks->saveRegions();
       strcpy(reply, "OK");
     } else {
       strcpy(reply, "Err - unknown region");
@@ -1140,6 +1142,7 @@ void CommonCLI::handleRegionCmd(char* command, char* reply) {
         strcpy(reply, "Err - unable to put");
       } else {
         region->flags = 0;   // New default: enable flood
+        _callbacks->saveRegions();
         strcpy(reply, "OK - (flood allowed)");
       }
     }
@@ -1147,6 +1150,7 @@ void CommonCLI::handleRegionCmd(char* command, char* reply) {
     auto region = _region_map->findByName(parts[2]);
     if (region) {
       if (_region_map->removeRegion(*region)) {
+        _callbacks->saveRegions();
         strcpy(reply, "OK");
       } else {
         strcpy(reply, "Err - not empty");
